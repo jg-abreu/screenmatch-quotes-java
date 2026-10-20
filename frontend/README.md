@@ -1,26 +1,15 @@
-![thumbnail-Desafio Java (1)](https://github.com/jacqueline-oliveira/3356-java-desafio-front/assets/66698429/6f1cf2db-ca91-493b-b37c-2c08ad2afc50)
+# Front end — ScreenMatch Quotes
 
-# Front-end da aplicação: Frases clássicas de filmes e séries ScreenMatch
+The web page that shows the random quotes served by the API. It was provided by [Alura](https://www.alura.com.br) as the template for the challenge.
 
-Essa é a aplicação Front-end que será utilizada no desafio proposto na última aula do curso.
+## Running
 
-Para visualizar a mesma, após o download ou clone do projeto, abra-a com o VS Code
+With the API running at `http://localhost:8080` (see the [root README](../README.md)), serve this folder through a local server, since the scripts are ES modules:
 
-Caso não possua, instale a extensão *Live Server*.
+```bash
+python -m http.server 5500     # then open http://localhost:5500
+```
 
-Feito isso, clique com o botão direito no arquivo **index.html** e escolha "Open with Live Server".
+Or right-click `index.html` in VS Code and choose **Open with Live Server**.
 
-A princípio, caso a sua API ainda não esteja desenvolvida, o conteúdo que você verá será esse abaixo:
-
-
-![image](https://github.com/jacqueline-oliveira/3356-java-desafio-front/assets/66698429/4b612a93-09d8-4376-8c30-8b18fbecd2fc)
-
-
-
-Após a finalização do desafio, seu projeto estará completo e a aplicação irá mostrar os dados, de forma similar à abaixo:
-
-
-![image](https://github.com/jacqueline-oliveira/3356-java-desafio-front/assets/66698429/bbd2799d-1360-4f0d-9330-f3a002c1a8c4)
-
-
-# Bom desafio!
+The API address is set in [`scripts/getDados.js`](scripts/getDados.js).

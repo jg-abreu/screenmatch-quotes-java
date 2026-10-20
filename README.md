@@ -1,67 +1,102 @@
-# 🎬 ScreenMatch Quotes
+# ScreenMatch Quotes
 
-![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
-![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Java 17](https://img.shields.io/badge/Java-17-ED8B00?logo=openjdk&logoColor=white)
+![Spring Boot 4](https://img.shields.io/badge/Spring_Boot-4-6DB33F?logo=springboot&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## 📌 Sobre o Projeto
+A REST API in Spring Boot that serves a random famous quote from movies and TV shows, stored in PostgreSQL and displayed by a small HTML/CSS/JavaScript front end.
 
-O **ScreenMatch Quotes** é uma aplicação completa (client-server) desenvolvida para gerenciar e exibir citações de filmes e séries.
+## Features
 
-Neste projeto, construí uma **API REST completa**, alimentando dinamicamente uma interface web interativa com dados estruturados, utilizando **Spring Boot no backend** e **JavaScript no frontend**. O foco principal foi garantir uma comunicação fluida entre o backend e a interface visual, aplicando boas práticas de arquitetura e design de rotas.
+- **Random quote endpoint** — `GET /series/frases` returns one quote picked at random by the database
+- **PostgreSQL persistence** — quotes are stored as JPA entities (title, quote, character and poster image)
+- **Front end integration** — the page fetches a new quote on load and every time you click the button
+- **DTO response** — the entity is mapped to a record so the API returns exactly the fields the front end expects
 
-## ⚙️ Funcionalidades
+## How it works
 
-- **API RESTful:** endpoints bem estruturados para o fornecimento de citações aleatórias.
-- **Integração backend/frontend:** consumo de dados via `fetch` API no JavaScript.
-- **Interface interativa:** frontend dinâmico (HTML/CSS/JS) que exibe as informações consumidas diretamente do servidor.
-- **Modelagem de dados:** estruturação cuidadosa das entidades (`Quote`) no backend.
+- `QuoteRepository` uses a native query (`ORDER BY RANDOM() LIMIT 1`) so the database picks the random row instead of loading every quote into memory.
+- `QuoteService` maps the entity to `QuoteDTO`, and `QuoteController` exposes it with CORS enabled so the page can call the API from another origin.
+- The JSON fields (`titulo`, `frase`, `personagem`, `poster`) follow the contract of the front-end template provided by the challenge.
 
-## 🛠️ Tecnologias Utilizadas
+Example response:
 
-**Backend**
-- Java
-- Spring Boot
-- JPA / Hibernate
-- Maven
+```json
+{
+  "titulo": "Breaking Bad",
+  "frase": "I am the one who knocks.",
+  "personagem": "Walter White",
+  "poster": "https://..."
+}
+```
 
-**Frontend**
-- HTML5 / CSS3
-- JavaScript (Vanilla)
+## Tech stack
 
-## 🚀 Como Executar o Projeto
+**Back end:** Java 17 · Spring Boot 4 (Web MVC, Data JPA) · Hibernate · PostgreSQL · Maven
+**Front end:** HTML · CSS · JavaScript (ES modules, `fetch`)
 
-### Pré-requisitos
+## Running
 
-- Java 17 ou superior
-- Maven
-- Navegador web
+Requirements: Java 17+ and a running PostgreSQL server.
 
-### Passo a passo
-
-1. Clone este repositório:
-   ```bash
-   git clone https://github.com/jg-abreu/desafio-alura-screenmatch_quotes-java-main.git
+1. Create the database:
+   ```sql
+   CREATE DATABASE gerador_frases;
    ```
 
-2. Navegue até a pasta do projeto:
+2. Set the connection through environment variables (the defaults are shown in parentheses):
+
+   | Variable | Default |
+   |---|---|
+   | `DB_HOST` | `localhost:5432` |
+   | `DB_USER` | `postgres` |
+   | `DB_PASSWORD` | `postgres` |
+
+3. Start the API:
    ```bash
-   cd desafio-alura-screenmatch_quotes-java-main
+   git clone https://github.com/jg-abreu/screenmatch-quotes-java.git
+   cd screenmatch-quotes-java
+   ./mvnw spring-boot:run        # http://localhost:8080
+   ```
+   Hibernate creates the `quotes` table on the first run.
+
+4. Add some quotes (the table starts empty):
+   ```sql
+   INSERT INTO quotes (title, quote, character, poster) VALUES
+   ('Breaking Bad', 'I am the one who knocks.', 'Walter White', '<poster image URL>');
    ```
 
-3. Execute o backend (Spring Boot):
-   - Rode a classe `GeradorDeFrasesApplication.java` na sua IDE de preferência (ou via `./mvnw spring-boot:run`).
-   - A API estará disponível em `http://localhost:8080`.
+5. Serve the front end. It uses ES modules, so it has to be opened through a local server rather than by double-clicking `index.html`:
+   ```bash
+   cd frontend
+   python -m http.server 5500     # then open http://localhost:5500
+   ```
+   The VS Code *Live Server* extension works too.
 
-4. Execute o frontend:
-   - Abra a pasta `frontend` e execute o arquivo `index.html` no navegador.
-   - Interaja com a página para ver o consumo da API em tempo real!
+## Project structure
 
-## 👨‍💻 Autor
+```
+├── src/main/java/br/com/alura/gerador_de_frases
+│   ├── controller/   REST endpoint
+│   ├── service/      entity → DTO mapping
+│   ├── repository/   native query for a random quote
+│   ├── model/        Quote entity
+│   └── dto/          QuoteDTO record
+└── frontend/         HTML, CSS and JavaScript page
+```
 
-**João Abreu**
-Desenvolvedor Backend Java | Spring Boot | PostgreSQL | API REST
+## Credits
 
-[🔗 LinkedIn](https://linkedin.com/in/SEU-USUARIO) · [🔗 GitHub](https://github.com/jg-abreu)
+Built as the solution to a challenge from [Alura](https://www.alura.com.br)'s Java course on building a first REST API and connecting it to a front end. The front-end template in `frontend/` was provided by Alura; the API is my own implementation.
+
+## License
+
+The API code is released under the [MIT License](LICENSE). The front-end template belongs to Alura.
+
+## Author
+
+**João Abreu** — back-end developer and Computer Science student in Rio de Janeiro, Brazil.
+
+[GitHub](https://github.com/jg-abreu) · [LinkedIn](https://www.linkedin.com/in/jo%C3%A3o-abreuuu) · jgabreudev@gmail.com
