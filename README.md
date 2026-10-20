@@ -4,7 +4,6 @@
 ![Spring Boot 4](https://img.shields.io/badge/Spring_Boot-4-6DB33F?logo=springboot&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A REST API in Spring Boot that serves a random famous quote from movies and TV shows, stored in PostgreSQL and displayed by a small HTML/CSS/JavaScript front end.
 
@@ -90,10 +89,6 @@ Requirements: Java 17+ and a running PostgreSQL server.
 ## Credits
 
 Built as the solution to a challenge from [Alura](https://www.alura.com.br)'s Java course on building a first REST API and connecting it to a front end. The front-end template in `frontend/` was provided by Alura; the API is my own implementation.
-
-## License
-
-The API code is released under the [MIT License](LICENSE). The front-end template belongs to Alura.
 
 ## Author
 
